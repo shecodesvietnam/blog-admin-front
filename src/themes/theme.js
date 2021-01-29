@@ -25,7 +25,6 @@ const theme = createMuiTheme({
       fontWeight: "800",
       fontSize: "48px",
       textAlign: "center",
-      color: "#03083F",
     },
     h2: {
       fontFamily: "Inter, sans-serif",
@@ -51,7 +50,7 @@ const theme = createMuiTheme({
       fontSize: "18px",
       lineHeight: "24px",
       textAlign: "center",
-      color: "#42466F",
+      color: "white",
       margin: "15px 0",
     },
     body2: {
@@ -61,7 +60,7 @@ const theme = createMuiTheme({
       fontSize: "14px",
       lineHeight: "18px",
       textAlign: "center",
-      color: "#42466F",
+      color: "white",
     },
   },
 });
