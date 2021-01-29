@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import PostsPage from "./pages/PostsPage/PostsPage";
 import SignIn from "./pages/SignInPage/SignIn";
+import Create from "./pages/Create";
 import { ThemeProvider } from "@material-ui/core/styles";
 
 import theme from "./themes/theme";
@@ -22,19 +23,21 @@ function App() {
     }
   }, []);
   return (
-    <Router>
-      <Route>
-        <ThemeProvider theme={theme}>
-          <Switch>
-            <Route exact path="/">
-              {IsAuth ? <Redirect to="/posts" /> : SignIn}
-            </Route>
-            <Route exact path="/posts" component={PostsPage} />
-          </Switch>
-        </ThemeProvider>
-      </Route>
-    </Router>
+  //   <Router>
+  //     <Route>
+  //       <ThemeProvider theme={theme}>
+  //         <Switch>
+  //           <Route exact path="/">
+  //             {IsAuth ? <Redirect to="/posts" /> : SignIn}
+  //           </Route>
+  //           <Route exact path="/posts" component={PostsPage} />
+  //         </Switch>
+  //       </ThemeProvider>
+  //     </Route>
+  //   </Router>
+  <Create/>
   );
+  
 }
 
 export default App;
