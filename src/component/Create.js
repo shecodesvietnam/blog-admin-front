@@ -1,6 +1,8 @@
 import { useState, useRef } from "react";
 import { useHistory, Route, Switch, NavLink, Link } from "react-router-dom";
 import axios from "axios";
+import useUndo from "use-undo";
+
 
 
 
@@ -110,7 +112,7 @@ const Create = () => {
         {/* <Link to="/recentpost"> */}
         <button>Create</button>
         {/* </Link> */}
-        <button>Discard</button>
+        {/* <button>Discard</button> */}
       </form>
     </div>
   );

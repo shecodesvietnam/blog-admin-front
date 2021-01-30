@@ -37,7 +37,7 @@ function App() {
   //       </ThemeProvider>
   //     </Route>
   //   </Router>
-  <Edit/>
+  <Create/>
 
   );
   
