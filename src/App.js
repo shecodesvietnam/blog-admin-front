@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import PostsPage from "./pages/PostsPage/PostsPage";
 import SignIn from "./pages/SignInPage/SignIn";
-import Create from "./pages/Create";
+import Create from "./component/Create";
+import Edit from "./component/Edit";
+
 import { ThemeProvider } from "@material-ui/core/styles";
 
 import theme from "./themes/theme";
@@ -35,7 +37,8 @@ function App() {
   //       </ThemeProvider>
   //     </Route>
   //   </Router>
-  <Create/>
+  <Edit/>
+
   );
   
 }
