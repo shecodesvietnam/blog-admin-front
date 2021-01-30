@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import PostsPage from "./pages/PostsPage/PostsPage";
-import SignIn from "./pages/SignInPage/SignIn";
+import SignInPage from "./pages/SignInPage/SignIn";
 import { ThemeProvider } from "@material-ui/core/styles";
 
 import theme from "./themes/theme";
@@ -27,7 +27,7 @@ function App() {
         <ThemeProvider theme={theme}>
           <Switch>
             <Route exact path="/">
-              {IsAuth ? <Redirect to="/posts" /> : SignIn}
+              {IsAuth ? <Redirect to="/posts" /> : SignInPage}
             </Route>
             <Route exact path="/posts" component={PostsPage} />
           </Switch>
