@@ -195,7 +195,7 @@ const Edit = () => {
             <button
               type="submit"
               className="badge badge-success"
-              // onClick={() => update()}
+              // onClick={() => update(currentBlog.id)}
             >
               Update
             </button>
