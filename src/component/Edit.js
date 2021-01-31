@@ -4,7 +4,8 @@ import BlogServices from "../services/BlogServices";
 import { useHistory, Route, Switch, NavLink, Link } from "react-router-dom";
 import axios from "axios";
 
-const Edit = () => {
+const Edit = (props) => {
+  const { post, rawImages } = props.location.state;
   const initialBlogState = {
     id: null,
     title: "",
@@ -12,20 +13,19 @@ const Edit = () => {
     images: null,
   };
 
-  const [currentBlog, setCurrentBlog] = useState(initialBlogState);
+  const [currentBlog, setCurrentBlog] = useState(post);
   const [message, setMessage] = useState("");
 
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
   const formRef = useRef();
 
   const history = useHistory();
   const [show, setShow] = useState(false);
 
-  const [images, setImage] = useState(null);
+  const [images, setImage] = useState(rawImages);
 
   // const getBlog = (id) => {
-  //   BlogServices.get(id)
+  //   axios
+  //     .get(`http://206.189.155.4:3000/api/posts/${id}`)
   //     .then((response) => {
   //       setCurrentBlog(response.data);
   //       console.log(response.data);
@@ -35,18 +35,6 @@ const Edit = () => {
   //     });
   // };
 
-  const getBlog = (id) => {
-    axios
-      .get(`http://206.189.155.4:3000/api/posts/${id}`)
-      .then((response) => {
-        setCurrentBlog(response.data);
-        console.log(response.data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
-
   // useEffect(() => {
   //   getBlog(props.match.params.id);
   // }, [props.match.params.id]);
@@ -54,6 +42,7 @@ const Edit = () => {
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setCurrentBlog({ ...currentBlog, [name]: value });
+    
   };
 
   const handleFileChange = (e) => {
@@ -63,17 +52,12 @@ const Edit = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(e);
-    const blog = {
-      title,
-      content,
-
-      images: [],
-    };
+    
     if (images) {
       for (let i = 0; i < images.length; i++) {
-        blog.images.push(images[i].name);
+        rawImages.push(images[i].name);
       }
-      console.log(blog);
+      console.log(post);
     }
 
     // fetch("http://localhost:8000/blogs/", {
@@ -90,7 +74,7 @@ const Edit = () => {
     // .then(res => console.log(res.data));
     const response = await axios.post(
       "http://206.189.155.4:3000/api/posts",
-      blog,
+      post,
       {
         headers: {
           "X-Auth-Token":
@@ -106,7 +90,7 @@ const Edit = () => {
 
     const update = (id) => {  axios.put(
       `http://206.189.155.4:3000/api/posts/${id}`,
-      blog,
+      post,
       {
         headers: {
           'Accept':'application/json',
@@ -150,10 +134,7 @@ const Edit = () => {
         },
       });
     }
-    formRef.current.reset();
-    setTitle("");
-    setContent("");
-    setImage([]);
+    
   };
 
   return (
@@ -169,8 +150,8 @@ const Edit = () => {
                 className="form-control"
                 id="title"
                 name="title"
-                value={currentBlog.title}
-                onChange={(e)=>{setTitle(e.target.value)}}
+                value={post.title}
+                onChange={handleInputChange}
               />
             </div>
             <div className="form-group">
@@ -180,8 +161,8 @@ const Edit = () => {
                 className="form-control"
                 id="content"
                 name="content"
-                value={currentBlog.content}
-                onChange={(e)=>{setContent(e.target.value)}}
+                value={post.content}
+                onChange={handleInputChange}
               />
             </div>
             <label>Image</label>
