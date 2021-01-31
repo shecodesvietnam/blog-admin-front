@@ -4,6 +4,9 @@ import PostsPage from "./pages/PostsPage/PostsPage";
 import SignIn from "./pages/SignInPage/SignIn";
 import Create from "./component/Create";
 import Edit from "./component/Edit";
+import Delete from "./component/Delete";
+
+
 
 import { ThemeProvider } from "@material-ui/core/styles";
 

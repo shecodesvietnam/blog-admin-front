@@ -37,7 +37,7 @@ const Edit = () => {
 
   const getBlog = (id) => {
     axios
-      .get("http://206.189.155.4:3000/api/posts/:id")
+      .get(`http://206.189.155.4:3000/api/posts/${id}`)
       .then((response) => {
         setCurrentBlog(response.data);
         console.log(response.data);
@@ -76,31 +76,6 @@ const Edit = () => {
       console.log(blog);
     }
 
-    const updateBlog = (e) => {
-      axios
-        .put("http://206.189.155.4:3000/api/posts/:id", currentBlog)
-
-        .then((response) => {
-          console.log(response.data);
-          setMessage("The blog was updated successfully!");
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    };
-
-    const deleteBlog = (e) => {
-      axios
-        .del("http://206.189.155.4:3000/api/posts/:id")
-        .then((response) => {
-          console.log(response.data);
-          history.push("/posts");
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    };
-
     // fetch("http://localhost:8000/blogs/", {
     //   method: "POST",
     //   headers: { "Content-Type": "application/json" },
@@ -122,18 +97,35 @@ const Edit = () => {
             "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDBkNGY5NGU5ZWM2NzQyMDRkOTNjMGIiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2MTE5MzU2NzR9.5SiOhydip5ieAwTLYSFaemdiJ8hYn9yfa9agk29eZvQ",
         },
       }
+      
     );
     // .then(() => {
     //   // history.go(-1);
     //   history.push("/");
     // });
 
-    const update = axios.put("http://206.189.155.4:3000/api/posts/:id", blog, {
-      headers: {
-        "X-Auth-Token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDBkNGY5NGU5ZWM2NzQyMDRkOTNjMGIiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2MTE5MzU2NzR9.5SiOhydip5ieAwTLYSFaemdiJ8hYn9yfa9agk29eZvQ",
-      },
-    });
+    const update = (id) => {  axios.put(
+      `http://206.189.155.4:3000/api/posts/${id}`,
+      blog,
+      {
+        headers: {
+          'Accept':'application/json',
+        'Content-Type':'application/json',
+          "X-Auth-Token":
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDBkNGY5NGU5ZWM2NzQyMDRkOTNjMGIiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2MTE5MzU2NzR9.5SiOhydip5ieAwTLYSFaemdiJ8hYn9yfa9agk29eZvQ",
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        setMessage("The blog was updated successfully!");
+      })
+      .catch((e) => {
+        console.log(e);
+      })
+      
+    
+    };
+
 
     console.log(response.data.images[0]);
     if (images) {
@@ -164,47 +156,6 @@ const Edit = () => {
     setImage([]);
   };
 
-  //   return (
-  //     <div className="edit">
-  //       <h2>Edit a post</h2>
-  //       <form onSubmit={handleSubmit} ref={formRef}>
-  //         <label>Blog title:</label>
-  //         <input
-  //           type="text"
-  //           required
-  //           value={title}
-  //           onChange={(e) => setTitle(e.target.value)}
-
-  //         />
-  //         <label>Blog body:</label>
-  //         <textarea
-  //           required
-  //           value={content}
-  //           onChange={(e) => setContent(e.target.value)}
-  //         ></textarea>
-
-  //         <label>Image</label>
-  //         <input type="file" multiple onChange={handleFileChange} accept='.png,.jpg,.mp4' />
-
-  //         <button className="badge badge-danger mr-2" onClick={(e) => {
-  //                 deleteBlog(e);
-  //               }}>
-  //             Delete
-  //           </button>
-
-  //           <button
-  //             type="submit"
-  //             className="badge badge-success"
-  //             onClick={updateBlog}
-  //           >
-  //             Update
-  //           </button>
-  //       </form>
-  //       <p>{message}</p>
-  //     </div>
-  //   );
-  // };
-
   return (
     <div>
       {currentBlog ? (
@@ -219,7 +170,7 @@ const Edit = () => {
                 id="title"
                 name="title"
                 value={currentBlog.title}
-                onChange={handleInputChange}
+                onChange={(e)=>{setTitle(e.target.value)}}
               />
             </div>
             <div className="form-group">
@@ -230,7 +181,7 @@ const Edit = () => {
                 id="content"
                 name="content"
                 value={currentBlog.content}
-                onChange={handleInputChange}
+                onChange={(e)=>{setContent(e.target.value)}}
               />
             </div>
             <label>Image</label>
@@ -240,17 +191,11 @@ const Edit = () => {
               onChange={handleFileChange}
               accept=".png,.jpg,.mp4"
             />
-            <button
-              className="badge badge-danger mr-2"
-              onClick={() => this.deleteBlog()}
-            >
-              Delete
-            </button>
-
+            
             <button
               type="submit"
               className="badge badge-success"
-              onClick={() => this.updateBlog()}
+              // onClick={() => update()}
             >
               Update
             </button>
