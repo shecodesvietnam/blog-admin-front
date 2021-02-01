@@ -26,23 +26,6 @@ const Edit = (props) => {
 
   const [images, setImage] = useState(rawImages);
   
-    
-
-  // const getBlog = (id) => {
-  //   axios
-  //     .get(`http://206.189.155.4:3000/api/posts/${id}`)
-  //     .then((response) => {
-  //       setCurrentBlog(response.data);
-  //       console.log(response.data);
-  //     })
-  //     .catch((e) => {
-  //       console.log(e);
-  //     });
-  // };
-
-  // useEffect(() => {
-  //   getBlog(props.match.params.id);
-  // }, [props.match.params.id]);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -70,24 +53,6 @@ const Edit = (props) => {
       console.log(post);
     }
 
-    // for (let i = 0; i < rawImages.length; i++) {
-    //   console.log(rawImages[i])
-    // }
-
-    
-
-    // fetch("http://localhost:8000/blogs/", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   // X-Auth-Token: {add jwt token here},
-    //   body: JSON.stringify(blog),
-    // }).then(() => {
-    //   // history.go(-1);
-    //   history.push("/");
-    // });
-
-    // axios.put('http://dummy.restapiexample.com/api/v1/update/{this.state.id}', blog)
-    // .then(res => console.log(res.data));
     const response = await axios.post(
       "http://206.189.155.4:3000/api/posts",
       post,
@@ -99,10 +64,7 @@ const Edit = (props) => {
       }
       
     );
-    // .then(() => {
-    //   // history.go(-1);
-    //   history.push("/");
-    // });
+   
 
     const update = (id) => {  axios.put(
       `http://206.189.155.4:3000/api/posts/${id}`,
@@ -184,9 +146,7 @@ const Edit = (props) => {
               />
             </div>
             <label>Image</label>
-            {/* <img src="http://206.189.155.4:3000/media/601440546a5cd8b79a5dce4f_0.PNG"/>
-            <img src="http://206.189.155.4:3000/media/601440546a5cd8b79a5dce4f_1.PNG"/>
-            {currentBlog.images.map((image) => <DeleteImage/>)} */}
+            
             {currentBlog.images.map((image) => <>
               <img src={`http://206.189.155.4:3000${image}`} alt={`${image}`} />
               <DeleteImage onDelete={(e) => {

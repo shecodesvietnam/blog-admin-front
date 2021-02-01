@@ -39,15 +39,7 @@ const Create = () => {
       }
       console.log(blog);
     }
-    // fetch("http://localhost:8000/blogs/", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   // X-Auth-Token: {add jwt token here},
-    //   body: JSON.stringify(blog),
-    // }).then(() => {
-    //   // history.go(-1);
-    //   history.push("/");
-    // });
+    
     const response = await axios.post(
       "http://206.189.155.4:3000/api/posts",
       blog,
@@ -58,10 +50,7 @@ const Create = () => {
         },
       }
     );
-    // .then(() => {
-    //   // history.go(-1);
-    //   history.push("/");
-    // });
+    
 
     console.log(response.data.images[0]);
     if (images) {
@@ -125,9 +114,9 @@ const Create = () => {
                 setImage(newImages);
               }} />
               </div>)}
-        {/* <Link to="/recentpost"> */}
+       
         <button>Create</button>
-        {/* </Link> */}
+        
         {/* <button>Discard</button> */}
       </form>
     </div>
