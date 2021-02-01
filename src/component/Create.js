@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { useHistory, Route, Switch, NavLink, Link } from "react-router-dom";
 import axios from "axios";
 import useUndo from "use-undo";
+import DeleteImage from "./DeleteImage";
 
 
 
@@ -11,14 +12,17 @@ const Create = () => {
   const [content, setContent] = useState("");
   const formRef = useRef();
 
+  
   const history = useHistory();
   const [show, setShow] = useState(false);
 
-  const [images, setImage] = useState(null);
+  const [images, setImage] = useState([]);
 
   const handleFileChange = (e) => {
-    setImage(e.target.files);
+    setImage([...images, e.target.files[0]]);
+    e.target.value = null;
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -108,7 +112,19 @@ const Create = () => {
         ></textarea>
 
         <label>Image</label>
-        <input type="file" multiple onChange={handleFileChange} accept='.png,.jpg,.mp4' />
+        <input type="file" onChange={handleFileChange} accept='.png,.jpg,.mp4'  />
+        {images.map((image, index) => <div key={ index}>
+              <img src={URL.createObjectURL(image)} alt={`${image}`} />
+              <DeleteImage onDelete={(e) => {
+                e.preventDefault();
+                const newImages = [...images];
+                const index = newImages.indexOf(image);
+               newImages.splice(index, 1);
+                console.log(index);
+                console.log(newImages)
+                setImage(newImages);
+              }} />
+              </div>)}
         {/* <Link to="/recentpost"> */}
         <button>Create</button>
         {/* </Link> */}

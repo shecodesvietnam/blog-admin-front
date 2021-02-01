@@ -4,8 +4,11 @@ import BlogServices from "../services/BlogServices";
 import { useHistory, Route, Switch, NavLink, Link } from "react-router-dom";
 import axios from "axios";
 
+import DeleteImage from "./DeleteImage";
+
 const Edit = (props) => {
   const { post, rawImages } = props.location.state;
+  console.log(post)
   const initialBlogState = {
     id: null,
     title: "",
@@ -22,6 +25,8 @@ const Edit = (props) => {
   const [show, setShow] = useState(false);
 
   const [images, setImage] = useState(rawImages);
+  
+    
 
   // const getBlog = (id) => {
   //   axios
@@ -47,6 +52,11 @@ const Edit = (props) => {
 
   const handleFileChange = (e) => {
     setImage(e.target.files);
+    const fileNames = [...currentBlog.images];
+    for (let i = 0; i < e.target.files.length; i++){
+      fileNames.push(e.target.files[i].name)
+    }
+    setCurrentBlog({...currentBlog, images: fileNames});
   };
 
   const handleSubmit = async (e) => {
@@ -59,6 +69,12 @@ const Edit = (props) => {
       }
       console.log(post);
     }
+
+    // for (let i = 0; i < rawImages.length; i++) {
+    //   console.log(rawImages[i])
+    // }
+
+    
 
     // fetch("http://localhost:8000/blogs/", {
     //   method: "POST",
@@ -137,6 +153,8 @@ const Edit = (props) => {
     
   };
 
+
+
   return (
     <div>
       {currentBlog ? (
@@ -166,9 +184,24 @@ const Edit = (props) => {
               />
             </div>
             <label>Image</label>
+            {/* <img src="http://206.189.155.4:3000/media/601440546a5cd8b79a5dce4f_0.PNG"/>
+            <img src="http://206.189.155.4:3000/media/601440546a5cd8b79a5dce4f_1.PNG"/>
+            {currentBlog.images.map((image) => <DeleteImage/>)} */}
+            {currentBlog.images.map((image) => <>
+              <img src={`http://206.189.155.4:3000${image}`} alt={`${image}`} />
+              <DeleteImage onDelete={(e) => {
+                e.preventDefault();
+                const newImages = [...currentBlog.images]
+                const index = newImages.indexOf(image);
+                newImages.splice(index, 1);
+                const newRawImages = [ ...rawImages ].splice(index, 1);
+                setCurrentBlog({...currentBlog, images: newImages});
+                setImage(newRawImages);
+              }} />
+            </>)}
             <input
               type="file"
-              multiple
+              
               onChange={handleFileChange}
               accept=".png,.jpg,.mp4"
             />

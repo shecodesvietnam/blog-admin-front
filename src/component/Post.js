@@ -35,6 +35,8 @@ const Post = (props) => {
     init();
   }, []);
 
+  // console.log(rawImages);
+
   return (
     <div>
       {!loading && (

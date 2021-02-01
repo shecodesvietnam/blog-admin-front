@@ -32,6 +32,7 @@ function App() {
           {IsAuth ? <Redirect to="/posts" /> : SignIn}
         </Route>
         <Route exact path="/posts" component={PostsPage} />
+        <Route exact path="/posts/create" component={Create} />
         <Route exact path="/posts/:id" component={Post} />
         <Route exact path="/posts/:id/edit" component={Edit} />
       </Switch>
