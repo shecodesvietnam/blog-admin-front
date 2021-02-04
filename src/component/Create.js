@@ -26,7 +26,7 @@ const Create = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(e);
+    console.log(images);
     const blog = {
       title,
       content,
@@ -40,45 +40,45 @@ const Create = () => {
       console.log(blog);
     }
     
-    const response = await axios.post(
-      "http://206.189.155.4:3000/api/posts",
-      blog,
-      {
-        headers: {
-          "X-Auth-Token":
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDBkNGY5NGU5ZWM2NzQyMDRkOTNjMGIiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2MTE5MzU2NzR9.5SiOhydip5ieAwTLYSFaemdiJ8hYn9yfa9agk29eZvQ",
-        },
-      }
-    );
+    // const response = await axios.post(
+    //   "http://206.189.155.4:3000/api/posts",
+    //   blog,
+    //   {
+    //     headers: {
+    //       "X-Auth-Token":
+    //         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDBkNGY5NGU5ZWM2NzQyMDRkOTNjMGIiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2MTE5MzU2NzR9.5SiOhydip5ieAwTLYSFaemdiJ8hYn9yfa9agk29eZvQ",
+    //     },
+    //   }
+    // );
     
 
-    console.log(response.data.images[0]);
-    if (images) {
-      const formData = new FormData();
+    // console.log(response.data.images[0]);
+    // if (images) {
+    //   const formData = new FormData();
 
-      for (let i = 0; i < images.length; i++) {
-        formData.append(
-          "file",
-          new File(
-            [images[i]],
-            response.data.images[i].replace("/media/", ""),
-            { type: images[i].type }
-          )
-        );
-      }
+    //   for (let i = 0; i < images.length; i++) {
+    //     formData.append(
+    //       "file",
+    //       new File(
+    //         [images[i]],
+    //         response.data.images[i].replace("/media/", ""),
+    //         { type: images[i].type }
+    //       )
+    //     );
+    //   }
 
-      await axios.post("http://206.189.155.4:3000/api/media", formData, {
-        headers: {
-          "X-Auth-Token":
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDBkNGY5NGU5ZWM2NzQyMDRkOTNjMGIiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2MTE5MzU2NzR9.5SiOhydip5ieAwTLYSFaemdiJ8hYn9yfa9agk29eZvQ",
-          "Content-Type": "multipart/form-data",
-        },
-      });
-    }
-    formRef.current.reset();
-    setTitle('')
-    setContent('')
-    setImage([])
+    //   await axios.post("http://206.189.155.4:3000/api/media", formData, {
+    //     headers: {
+    //       "X-Auth-Token":
+    //         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDBkNGY5NGU5ZWM2NzQyMDRkOTNjMGIiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2MTE5MzU2NzR9.5SiOhydip5ieAwTLYSFaemdiJ8hYn9yfa9agk29eZvQ",
+    //       "Content-Type": "multipart/form-data",
+    //     },
+    //   });
+    // }
+    // formRef.current.reset();
+    // setTitle('')
+    // setContent('')
+    // setImage([])
   };
 
   return (
