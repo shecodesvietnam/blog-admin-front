@@ -5,10 +5,7 @@ import { Link } from "react-router-dom";
 
 export default class Table extends Component {
 
-    constructor(props) {
-        super(props);
-    };
-
+   
     deleteHandler(i, e) {
         e.preventDefault();
         this.props.onDelete(this.props.blogPosts[i].id);
