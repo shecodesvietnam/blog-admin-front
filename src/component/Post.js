@@ -14,9 +14,9 @@ const Post = (props) => {
   const [loading, setLoading] = useState(true);
 
   async function init() {
-    function getType(filename) {
-      return filename.substring(dotIndex);
-    }
+    // function getType(filename) {
+    //   return filename.substring(dotIndex);
+    // }
 
     const { data } = await axios.get(
       `http://206.189.155.4:3000/api/posts/${props.match.params.id}`
@@ -29,7 +29,7 @@ const Post = (props) => {
       const { data } = await axios.get(`http://206.189.155.4:3000${images[i]}`);
       const imageName = images[i].replace("/media/", "");
       raws.push(new File([data], imageName, {
-        type: getType(image)
+        // type: getType(image)
       }));
     }
 
