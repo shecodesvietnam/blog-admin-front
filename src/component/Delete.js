@@ -83,6 +83,7 @@ const Delete = (props) => {
               className="badge badge-success"
               // onClick={() => deleteBlog(currentBlog.id)}
               onDelete={onDelete.bind(this)}
+             
             >
               Delete
             </button>
