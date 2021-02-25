@@ -77,6 +77,7 @@ const Delete = (props) => {
             });
     };
     return ( 
+      <Table>
         <button
               type="submit"
               className="badge badge-success"
@@ -85,6 +86,7 @@ const Delete = (props) => {
             >
               Delete
             </button>
+            </Table>
      );
 }
  
