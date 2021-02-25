@@ -4,25 +4,41 @@ import BlogServices from "../services/BlogServices";
 import { useHistory, Route, Switch, NavLink, Link } from "react-router-dom";
 import axios from "axios";
 
-const Delete = () => {
-    const initialBlogState = {
-        id: null,
-        title: "",
-        content: "",
-        images: null,
-      };
-    
-      const [currentBlog, setCurrentBlog] = useState(initialBlogState);
-      const [message, setMessage] = useState("");
-    
-      const [title, setTitle] = useState("");
-      const [content, setContent] = useState("");
-      const formRef = useRef();
+import Table from "./Table";
+
+
+const Delete = (props) => {
+  const { post, rawImages } = props.location.state;
+
+  const [currentBlog, setCurrentBlog] = useState({
+    id: post._id,
+    title: post.title,
+    content: post.content,
+    images: [...post.images],
+  });
+  const [message, setMessage] = useState("");
+
+  const formRef = useRef();
+  const imageRef = useRef();
+
+  const [images, setImage] = useState(rawImages);
     
       const history = useHistory();
-      const [show, setShow] = useState(false);
+   
+
+      const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        setCurrentBlog({ ...currentBlog, [name]: value });
+      };
     
-      const [images, setImage] = useState(null);
+      const handleFileChange = (e) => {
+        setCurrentBlog({
+          ...currentBlog,
+          images: [...currentBlog.images, e.target.files[0].name],
+        });
+        setImage([...images, e.target.files[0]]);
+        e.target.value = null;
+      };
 
       const getBlog = (id) => {
         axios
@@ -46,11 +62,26 @@ const Delete = () => {
             console.log(e);
           });
       };
+
+    const  onDelete = (id) => {
+        deleteBlog(id)
+            .then((data) => {
+                let blogPosts = currentBlog.filter((post) => {
+                    return id !== post.id;
+                });
+
+                setCurrentBlog(blogPosts)
+            })
+            .catch((e) => {
+              console.log(e);
+            });
+    };
     return ( 
         <button
               type="submit"
               className="badge badge-success"
-              onClick={() => deleteBlog(currentBlog.id)}
+              // onClick={() => deleteBlog(currentBlog.id)}
+              onDelete={onDelete.bind(this)}
             >
               Delete
             </button>
