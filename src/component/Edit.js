@@ -6,7 +6,6 @@ import axios from "axios";
 
 import DeleteImage from "./DeleteImage";
 import Delete from "./Delete";
-import DeleteButton from "./DeleteButton";
 
 const Edit = (props) => {
   const { post, rawImages } = props.location.state;
