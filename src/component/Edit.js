@@ -21,7 +21,9 @@ const Edit = (props) => {
   const formRef = useRef();
   const imageRef = useRef();
 
-  const [images, setImage] = useState(rawImages);
+  const [uploadedImages, setUploadedImages] = useState(rawImages);
+
+  const [newImages, setNewImages] = useState([]);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -33,7 +35,7 @@ const Edit = (props) => {
       ...currentBlog,
       images: [...currentBlog.images, e.target.files[0].name],
     });
-    setImage([...images, e.target.files[0]]);
+    setNewImages([...newImages, e.target.files[0]]);
     e.target.value = null;
   };
 
@@ -119,26 +121,29 @@ const Edit = (props) => {
               />
             </div>
             <label>Image</label>
-
-            {images.map((image, index) => {
-              console.log(image);
-              return (
-                <div key={index}>
+            {uploadedImages.map((image, index) => 
+              <div key={index}>
+                <img src={`http://206.189.155.4:3000/media/${image.name}`}/>
+                <DeleteImage
+                onDelete={(e) => {
+                  e.preventDefault();
+                  const images = [...currentBlog.images];
+                  images.splice(index, 1);
+                  const newRawImages = [...uploadedImages].splice(index, 1);
+                  console.log(newRawImages)
+                  setCurrentBlog({ ...currentBlog, images: images });
+                  setUploadedImages(newRawImages);
+                }}/>
+              </div>
+            )}
+            {newImages.map((image, index) => <div key={index}>
                   <img src={URL.createObjectURL(image)} alt={`${image.name}`} />
                   <DeleteImage
-                    onDelete={(e) => {
-                      e.preventDefault();
-                      const newImages = [...currentBlog.images];
-                      const index = newImages.indexOf(image);
-                      newImages.splice(index, 1);
-                      const newRawImages = [...images].splice(index, 1);
-                      setCurrentBlog({ ...currentBlog, images: newImages });
-                      setImage(newRawImages);
-                    }}
+                    
                   />
                 </div>
-              );
-            })}
+            )
+            }
             <input
               type="file"
               onChange={handleFileChange}
@@ -152,7 +157,7 @@ const Edit = (props) => {
             >
               Update
             </button>
-            <Delete />
+            {/* <Delete /> */}
             <p>{message}</p>
           </form>
         </div>
