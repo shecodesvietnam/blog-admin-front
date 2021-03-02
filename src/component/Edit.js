@@ -19,9 +19,6 @@ const Edit = (props) => {
   const [message, setMessage] = useState("");
 
   const formRef = useRef();
-  const imageRef = useRef();
-
-  const [uploadedImages, setUploadedImages] = useState(rawImages);
 
   const [newImages, setNewImages] = useState([]);
 
@@ -29,6 +26,10 @@ const Edit = (props) => {
     const { name, value } = event.target;
     setCurrentBlog({ ...currentBlog, [name]: value });
   };
+
+  useEffect(() => {
+    console.log(currentBlog);
+  }, [currentBlog]);
 
   const handleFileChange = (e) => {
     setCurrentBlog({
@@ -121,18 +122,15 @@ const Edit = (props) => {
               />
             </div>
             <label>Image</label>
-            {uploadedImages.map((image, index) => 
+            {currentBlog.images.map((image, index) => 
               <div key={index}>
-                <img src={`http://206.189.155.4:3000/media/${image.name}`}/>
+                <img src={`http://206.189.155.4:3000${image}`}/>
                 <DeleteImage
                 onDelete={(e) => {
                   e.preventDefault();
                   const images = [...currentBlog.images];
                   images.splice(index, 1);
-                  const newRawImages = [...uploadedImages].splice(index, 1);
-                  console.log(newRawImages)
                   setCurrentBlog({ ...currentBlog, images: images });
-                  setUploadedImages(newRawImages);
                 }}/>
               </div>
             )}
