@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-import Edit from "./Edit";
 import { Link } from "react-router-dom";
 
 const Post = (props) => {
@@ -10,36 +9,13 @@ const Post = (props) => {
     content: "",
     images: [],
   });
-  const [rawImages, setRawImages] = useState([]);
   const [loading, setLoading] = useState(true);
 
   async function init() {
-    function getType(filename) {
-      let type =  (/[.]/.exec(filename)) ? /[^.]+$/.exec(filename) : undefined;
-      if (type == 'jpg') {
-        return 'jpeg'
-      } 
-      return type
-
-    }
-
     const { data } = await axios.get(
       `http://206.189.155.4:3000/api/posts/${props.match.params.id}`
     );
 
-    const images = [...data.images];
-    const raws = [];
-
-    for (let i = 0; i < (images.length > 0 ? images.length : 0); i++) {
-      const { data } = await axios.get(`http://206.189.155.4:3000${images[i]}`);
-     
-      const imageName = images[i].replace("/media/", "");
-      raws.push(new File([data], imageName, {
-        type: `image/${getType(imageName)}`
-      }));
-    }
-
-    setRawImages(raws);
     setPost(data);
     setLoading(false);
   }
@@ -58,7 +34,6 @@ const Post = (props) => {
               pathname: `/posts/${props.match.params.id}/edit`,
               state: {
                 post,
-                rawImages,
               },
             }}
           >
