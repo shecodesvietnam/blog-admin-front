@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import PostsPage from "./pages/PostsPage/PostsPage";
-import SignInPage from "./pages/SignInPage/SignIn";
+import SignIn from "./pages/SignInPage/SignIn";
+import Create from "./component/Create";
+import Edit from "./component/Edit";
+import Delete from "./component/Delete";
+import Post from './component/Post';
+
 import { ThemeProvider } from "@material-ui/core/styles";
 
 import theme from "./themes/theme";
 
 import {
-  BrowserRouter as Router,
   Route,
   Switch,
   Redirect,
@@ -22,19 +26,19 @@ function App() {
     }
   }, []);
   return (
-    <Router>
-      <Route>
-        <ThemeProvider theme={theme}>
-          <Switch>
-            <Route exact path="/">
-              {IsAuth ? <Redirect to="/posts" /> : SignInPage}
-            </Route>
-            <Route exact path="/posts" component={PostsPage} />
-          </Switch>
-        </ThemeProvider>
-      </Route>
-    </Router>
+    <ThemeProvider theme={theme}>
+      <Switch>
+        <Route exact path="/">
+          {IsAuth ? <Redirect to="/posts" /> : SignIn}
+        </Route>
+        <Route exact path="/posts" component={PostsPage} />
+        <Route exact path="/posts/create" component={Create} />
+        <Route exact path="/posts/:id" component={Post} />
+        <Route exact path="/posts/:id/edit" component={Edit} />
+      </Switch>
+    </ThemeProvider>
   );
+  
 }
 
 export default App;
