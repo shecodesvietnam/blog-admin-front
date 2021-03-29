@@ -36,8 +36,11 @@ const Create = () => {
     if (images) {
       for (let i = 0; i < images.length; i++) {
         blog.images.push(images[i].name);
+        
+      // console.log(blog);
+      console.log(blog.images.names);
       }
-      console.log(blog);
+      
     }
     
     // const response = await axios.post(

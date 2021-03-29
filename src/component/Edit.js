@@ -22,6 +22,8 @@ const Edit = (props) => {
 
   const [newImages, setNewImages] = useState([]);
 
+  
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setCurrentBlog({ ...currentBlog, [name]: value });
