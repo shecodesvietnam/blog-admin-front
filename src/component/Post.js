@@ -1,69 +1,53 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Card from "@material-ui/core/Card";
+import CardActionArea from "@material-ui/core/CardActionArea";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import CardMedia from "@material-ui/core/CardMedia";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
 
-import Edit from "./Edit";
-import { Link } from "react-router-dom";
+const useStyles = makeStyles({
+  root: {
+    maxWidth: 345,
+  },
+});
 
-const Post = (props) => {
-  const [post, setPost] = useState({
-    title: "",
-    content: "",
-    images: [],
-  });
-  const [rawImages, setRawImages] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  async function init() {
-    // function getType(filename) {
-    //   return filename.substring(dotIndex);
-    // }
-
-    const { data } = await axios.get(
-      `http://206.189.155.4:3000/api/posts/${props.match.params.id}`
-    );
-
-    const images = [...data.images];
-    const raws = [];
-
-    for (let i = 0; i < (images.length > 0 ? images.length : 0); i++) {
-      const { data } = await axios.get(`http://206.189.155.4:3000${images[i]}`);
-      const imageName = images[i].replace("/media/", "");
-      raws.push(new File([data], imageName, {
-        // type: getType(image)
-      }));
-    }
-
-    setRawImages(raws);
-    setPost(data);
-    setLoading(false);
-  }
-
-  useEffect(() => {
-    init();
-  }, []);
-
+export default function PostCard(props) {
+  const classes = useStyles();
 
   return (
-    <div>
-      {!loading && (
-        <>
-          <Link
-            to={{
-              pathname: `/posts/${props.match.params.id}/edit`,
-              state: {
-                post,
-                rawImages,
-              },
-            }}
-          >
-            Edit
-          </Link>
-          <p>{post.title}</p>
-          <p>{post.content}</p>
-        </>
-      )}
-    </div>
+    <Card className={classes.root}>
+      <CardActionArea>
+        <CardMedia
+          component="img"
+          height="200"
+          image={
+            `http://localhost:3000/api/media/image/${props.images[0]}` ||
+            "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"
+          }
+        />
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="h2">
+            {props.title || "Please Wait"}
+          </Typography>
+          <Typography variant="body2" color="textSecondary" component="p">
+            {props.content || "Loading"}
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+      <CardActions>
+        <Button size="small" color="primary">
+          More
+        </Button>
+        <Button size="small" color="primary">
+          Edit
+        </Button>
+        <Button onClick={() => props.delete()} size="small" color="primary">
+          Delete
+        </Button>
+      </CardActions>
+    </Card>
   );
-};
-
-export default Post;
+}

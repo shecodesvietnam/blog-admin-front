@@ -1,31 +1,31 @@
-import http from "../http-common";
+import http from "./authHeader";
 
 const getAll = () => {
-  return http.get("/posts");
+  return http.defAuth.get("/posts");
 };
 
-const get = id => {
-  return http.get(`/posts/${id}`);
+const get = (id) => {
+  return http.defAuth.get(`/posts/${id}`);
 };
 
-const create = data => {
-  return http.post("/posts", data);
+const create = (data) => {
+  return http.defAuth.post("/posts", data);
 };
 
 const update = (id, data) => {
-  return http.put(`/posts/${id}`, data);
+  return http.defAuth.put(`/posts/${id}`, data);
 };
 
-const remove = id => {
-  return http.delete(`/posts/${id}`);
+const remove = (id) => {
+  return http.defAuth.delete(`/posts/${id}`);
 };
 
 const removeAll = () => {
-  return http.delete(`/posts`);
+  return http.defAuth.delete(`/posts`);
 };
 
-const findByTitle = title => {
-  return http.get(`/posts?title=${title}`);
+const findByTitle = (title) => {
+  return http.defAuth.get(`/posts?title=${title}`);
 };
 
 export default {
@@ -35,5 +35,5 @@ export default {
   update,
   remove,
   removeAll,
-  findByTitle
+  findByTitle,
 };

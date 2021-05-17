@@ -1,97 +1,71 @@
-import { useState, useRef } from "react";
-import { useHistory, Route, Switch, NavLink, Link } from "react-router-dom";
-import axios from "axios";
-import useUndo from "use-undo";
+import { useState, useRef, useEffect } from "react";
+import { useHistory } from "react-router-dom";
+
 import DeleteImage from "./DeleteImage";
-
-
-
+import MediaServices from "../services/MediaServices";
+import BlogServices from "../services/BlogServices";
 
 const Create = () => {
+  const [isUpload, setUpload] = useState(false);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [file, setFile] = useState([]);
+  const [allimg, setAllImage] = useState([]);
   const formRef = useRef();
 
-  
   const history = useHistory();
   const [show, setShow] = useState(false);
 
   const [images, setImage] = useState([]);
 
+  useEffect(() => {
+    MediaServices.getAll()
+      .catch((e) => console.log(e))
+      .then((res) => setAllImage(res.data));
+  }, [allimg]);
+
   const handleFileChange = (e) => {
-    setImage([...images, e.target.files[0]]);
+    setFile([...file, e.target.files[0]]);
     e.target.value = null;
   };
-
+  const handleCreatePost = async (e) => {
+    e.preventDefault();
+    let blog = {
+      title,
+      content,
+      images,
+    };
+    if (blog.title && blog.content && blog.images) {
+      BlogServices.create(blog)
+        .catch((e) => console.log(e))
+        .then((res) => console.log(res.data));
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(images);
-    const blog = {
-      title,
-      content,
-
-      images: [],
-    };
-    if (images) {
-      for (let i = 0; i < images.length; i++) {
-        blog.images.push(images[i].name);
-      }
-      console.log(blog);
+    var fd = new FormData();
+    for (let i = 0; i < file.length; i++) {
+      fd.append("file", file[i], file[i].name);
     }
-    
-    // const response = await axios.post(
-    //   "http://206.189.155.4:3000/api/posts",
-    //   blog,
-    //   {
-    //     headers: {
-    //       "X-Auth-Token":
-    //         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDBkNGY5NGU5ZWM2NzQyMDRkOTNjMGIiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2MTE5MzU2NzR9.5SiOhydip5ieAwTLYSFaemdiJ8hYn9yfa9agk29eZvQ",
-    //     },
-    //   }
-    // );
-    
 
-    // console.log(response.data.images[0]);
-    // if (images) {
-    //   const formData = new FormData();
-
-    //   for (let i = 0; i < images.length; i++) {
-    //     formData.append(
-    //       "file",
-    //       new File(
-    //         [images[i]],
-    //         response.data.images[i].replace("/media/", ""),
-    //         { type: images[i].type }
-    //       )
-    //     );
-    //   }
-
-    //   await axios.post("http://206.189.155.4:3000/api/media", formData, {
-    //     headers: {
-    //       "X-Auth-Token":
-    //         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDBkNGY5NGU5ZWM2NzQyMDRkOTNjMGIiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2MTE5MzU2NzR9.5SiOhydip5ieAwTLYSFaemdiJ8hYn9yfa9agk29eZvQ",
-    //       "Content-Type": "multipart/form-data",
-    //     },
-    //   });
-    // }
-    // formRef.current.reset();
-    // setTitle('')
-    // setContent('')
-    // setImage([])
+    MediaServices.upload(fd)
+      .catch((err) => console.log(err))
+      .then((res) => {
+        res.data.file.map((e) => setImage((prev) => [...prev, e.filename]));
+      });
   };
 
   return (
     <div className="create">
       <h2>Add a New Blog</h2>
-      <form onSubmit={handleSubmit} ref={formRef}>
+      <form>
         <label>Blog title:</label>
         <input
           type="text"
           required
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          
         />
         <label>Blog body:</label>
         <textarea
@@ -100,25 +74,75 @@ const Create = () => {
           onChange={(e) => setContent(e.target.value)}
         ></textarea>
 
-        <label>Image</label>
-        <input type="file" onChange={handleFileChange} accept='.png,.jpg,.mp4'  />
-        {images.map((image, index) => <div key={ index}>
-              <img src={URL.createObjectURL(image)} alt={`${image}`} />
-              <DeleteImage onDelete={(e) => {
-                e.preventDefault();
-                const newImages = [...images];
-                const index = newImages.indexOf(image);
-               newImages.splice(index, 1);
-                console.log(index);
-                console.log(newImages)
-                setImage(newImages);
-              }} />
-              </div>)}
-       
-        <button>Create</button>
-        
-        {/* <button>Discard</button> */}
+        {/* <button type="submit">Discard</button> */}
       </form>
+      <form onSubmit={handleSubmit} ref={formRef}>
+        <label>Image</label>
+        <input
+          multiple
+          type="file"
+          onChange={handleFileChange}
+          accept=".png,.jpg,.mp4"
+        />
+        {file.map((image, index) => (
+          <div key={index}>
+            <img
+              width={100}
+              height="auto"
+              src={URL.createObjectURL(image)}
+              alt={`${image}`}
+            />
+            <DeleteImage
+              onDelete={(e) => {
+                e.preventDefault();
+                const newImages = [...file];
+                const index = newImages.indexOf(image);
+                newImages.splice(index, 1);
+                setImage(newImages);
+                setFile(newImages);
+              }}
+            />
+          </div>
+        ))}
+        <button type="submit">upload</button>
+      </form>
+      <button
+        onClick={() => {
+          console.log(images);
+        }}
+      >
+        log
+      </button>
+      <button
+        onClick={(e) => {
+          handleCreatePost(e);
+        }}
+      >
+        Create post
+      </button>
+      <div>
+        {allimg &&
+          allimg.map((e, i) => (
+            <>
+              <img
+                key={Math.random() * 1000 + e.filename}
+                width={100}
+                height="auto"
+                src={`http://localhost:3000/api/media/image/${e.filename}`}
+              />
+              <button
+                key={Math.random() * 1000 + e.filename}
+                onClick={() =>
+                  MediaServices.deleteImg(e.filename).then((res) => {
+                    console.log(res);
+                  })
+                }
+              >
+                delete
+              </button>
+            </>
+          ))}
+      </div>
     </div>
   );
 };
