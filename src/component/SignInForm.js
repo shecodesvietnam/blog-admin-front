@@ -12,7 +12,6 @@ import {
 import LinkedInIcon from "@material-ui/icons/LinkedIn";
 import FacebookIcon from "@material-ui/icons/Facebook";
 import InstagramIcon from "@material-ui/icons/Instagram";
-import axios from "axios";
 import UserServices from "../services/UserServices";
 
 const useStyle = makeStyles((theme) => ({
@@ -38,7 +37,6 @@ const useStyle = makeStyles((theme) => ({
       outline: "none",
       background:
         "linear-gradient(to right bottom, #e80872 69.1%, #592368 102.67%)",
-      // -webkit-background-clip: "text",
       transform: "rotate(5deg) scale(1.3)",
     },
   },

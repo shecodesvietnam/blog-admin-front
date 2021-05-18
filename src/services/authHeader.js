@@ -13,7 +13,9 @@ const defAuth = axios.create({
   },
 });
 
-export default {
+const authHeader = {
   defAuth,
   unAuth,
 };
+
+export default authHeader;

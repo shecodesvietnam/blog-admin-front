@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 
-import PostCard from "../../component/Post";
-import { Button, Grid } from "@material-ui/core";
+import PostCard from "../../component/Post/PostCard";
+import { Grid, Button } from "@material-ui/core";
 
 import BlogServices from "../../services/BlogServices";
 import Auth from "../../utilities/handle_auth";
+import MediaServices from "../../services/MediaServices";
+import { AllInboxOutlined } from "@material-ui/icons";
+import axios from "axios";
 
 export default function PostsPage() {
   const [data, setData] = useState("");
@@ -23,28 +26,47 @@ export default function PostsPage() {
   }, [data]);
 
   function deletePost(id) {
-    BlogServices.remove(id)
-      .catch((err) => console.log(err))
+    let a = data.find((e) => id == e._id).images;
+    let request = [];
+    console.log(a);
+    a.map((e) => request.push(MediaServices.deleteImg(e)));
+    axios
+      .all(request)
+      .catch(console.err)
       .then((res) => {
-        console.log(res);
-        window.location.reload();
+        return BlogServices.remove(id)
+          .catch((err) => console.log(err))
+          .then((res) => {
+            console.log(res);
+          });
       });
   }
+
   return (
-    <Grid container justify="center" spacing={4} alignItems="center">
-      {data &&
-        data.map((i, index) => (
-          <Grid key={index} item>
-            <PostCard
-              title={i.title}
-              images={i.images}
-              content={i.content}
-              delete={() => {
-                deletePost(i._id);
-              }}
-            ></PostCard>
-          </Grid>
-        ))}
-    </Grid>
+    <>
+      <Button href="/posts/create">New post</Button>
+      <Grid container justify="center" spacing={4} alignItems="center">
+        {(data.length &&
+          data.map((i, index) => (
+            <Grid key={index} item>
+              <PostCard
+                title={i.title}
+                images={i.images}
+                content={i.content}
+                more={() => {
+                  window.location.replace(`/posts/${i._id}/`);
+                }}
+                edit={() => {
+                  window.location.replace(`/posts/${i._id}/edit`);
+                }}
+                delete={() => {
+                  deletePost(i._id);
+                }}
+              ></PostCard>
+            </Grid>
+          ))) ||
+          "No posts yet"}
+      </Grid>
+    </>
   );
 }

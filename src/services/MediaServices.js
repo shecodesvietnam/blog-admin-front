@@ -16,9 +16,11 @@ const deleteImg = (filename) => {
   return http.defAuth.delete(`/media/files/${filename}`);
 };
 
-export default {
+const MediaServices = {
   getAll,
   get,
   upload,
   deleteImg,
 };
+
+export default MediaServices;

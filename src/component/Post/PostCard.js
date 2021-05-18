@@ -38,10 +38,10 @@ export default function PostCard(props) {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary">
+        <Button onClick={() => props.more()} size="small" color="primary">
           More
         </Button>
-        <Button size="small" color="primary">
+        <Button onClick={() => props.edit()} size="small" color="primary">
           Edit
         </Button>
         <Button onClick={() => props.delete()} size="small" color="primary">

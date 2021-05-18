@@ -28,7 +28,7 @@ const findByTitle = (title) => {
   return http.defAuth.get(`/posts?title=${title}`);
 };
 
-export default {
+const BlogServices = {
   getAll,
   get,
   create,
@@ -37,3 +37,5 @@ export default {
   removeAll,
   findByTitle,
 };
+
+export default BlogServices;

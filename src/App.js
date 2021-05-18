@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import PostsPage from "./pages/PostsPage/PostsPage";
 import SignInPage from "./pages/SignInPage/SignIn";
 import { ThemeProvider } from "@material-ui/core/styles";
 
-import Create from "./component/Create";
-import Post from "./component/Post";
-import Edit from "./component/Edit";
+import Create from "./component/Post/Create";
+import FullPost from "./component/Post/FullPost";
+import Edit from "./component/Post/Edit";
 
 import theme from "./themes/theme";
 
@@ -32,7 +32,7 @@ function App() {
           </Route>
           <Route exact path="/posts" component={PostsPage} />
           <Route exact path="/posts/create" component={Create} />
-          <Route exact path="/posts/:id" component={Post} />
+          <Route exact path="/posts/:id" component={FullPost} />
           <Route exact path="/posts/:id/edit" component={Edit} />
         </Switch>
       </tokenContext.Provider>

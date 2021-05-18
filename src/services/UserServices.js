@@ -12,8 +12,10 @@ const logout = () => {
   localStorage.removeItem("x-auth-token");
 };
 
-export default {
+const UserServices = {
   getMe,
   login,
   logout,
 };
+
+export default UserServices;

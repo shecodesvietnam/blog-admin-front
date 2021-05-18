@@ -1,7 +1,7 @@
 import React from "react";
 
 export const tokenContext = React.createContext(null);
-const UserContext = React.createContext();
+// const UserContext = React.createContext();
 
 // export function useAuthState() {
 //   const context = React.useContext(AuthStateContext);
