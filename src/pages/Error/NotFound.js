@@ -56,7 +56,7 @@ export default function Notfound() {
             </div>
           </div>
 
-          <a href="/" target="_blank" class="box__button">
+          <a href="/" class="box__button">
             Go back
           </a>
         </div>
