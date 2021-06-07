@@ -6,8 +6,8 @@ import { Grid, Button } from "@material-ui/core";
 import BlogServices from "../../services/BlogServices";
 import Auth from "../../utilities/handle_auth";
 import MediaServices from "../../services/MediaServices";
-import { AllInboxOutlined } from "@material-ui/icons";
 import axios from "axios";
+import WraperTest from "../../component/layout/withlayout";
 
 export default function PostsPage() {
   const [data, setData] = useState("");
@@ -43,8 +43,7 @@ export default function PostsPage() {
   }
 
   return (
-    <>
-      <Button href="/posts/create">New post</Button>
+    <WraperTest>
       <Grid container justify="center" spacing={4} alignItems="center">
         {(data.length &&
           data.map((i, index) => (
@@ -67,6 +66,6 @@ export default function PostsPage() {
           ))) ||
           "No posts yet"}
       </Grid>
-    </>
+    </WraperTest>
   );
 }

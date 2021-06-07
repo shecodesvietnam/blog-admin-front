@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
-import { Button } from "@material-ui/core";
+import { useHistory, useParams } from "react-router";
+import { Button, Grid, TextField, Typography } from "@material-ui/core";
 import BlogServices from "../../services/BlogServices";
 import MediaServices from "../../services/MediaServices";
 import axios from "axios";
+import { apiUrl } from "../../config/endpoint.json";
+import WraperTest from "../layout/withlayout";
+import { Carousel } from "react-responsive-carousel";
 
 export default function Edit() {
   const { id } = useParams();
@@ -14,22 +17,7 @@ export default function Edit() {
   });
   const [file, setFile] = useState([]);
   const [deletefile, setDeleteFile] = useState([]);
-
-  // const handleFileChange = (e) => {
-  //   console.log(e.target.files);
-  //   // setFile([...file, e.target.files[i]]);
-  //   for (let i = 0; i < e.target.files.length; i++) {
-  //     console.log(e.target.files[i]);
-  //     setFile((prev) => [...prev, e.target.files]);
-  //   }
-  //   //   if (e.target.files[0].size / 1000000 < 1) {
-  //   //     setFile((prev) => [...prev, ...e.target.files]);
-  //   //   } else {
-  //   //     alert("Upload file < 1Mb please");
-  //   //   }
-  //   // }
-  //   e.target.value = null;
-  // };
+  const router = useHistory();
 
   const handleFileChange = (e) => {
     if (e.target.files[0].size / 1000000 < 1) {
@@ -101,108 +89,186 @@ export default function Edit() {
   };
 
   return (
-    <div>
-      <h2>Add a New Blog</h2>
-      <button
-        onClick={() => {
-          console.log(blog);
-          console.log(file);
+    <WraperTest>
+      <Grid
+        container
+        style={{
+          marginTop: 16,
+          marginBottom: 32,
+          width: "97%",
+          paddingBottom: 16,
+          borderBottom: "1px solid white",
         }}
       >
-        Add a New Blog
-      </button>
-
-      <form>
-        <label>Blog title:</label>
-        <input
-          type="text"
-          required
-          value={blog && blog.title}
-          name="title"
-          onChange={(e) =>
-            setBlog((prev) => ({ ...prev, [e.target.name]: e.target.value }))
-          }
-        />
-        <label>Blog body:</label>
-        <textarea
-          required
-          value={blog && blog.content}
-          name="content"
-          onChange={(e) =>
-            setBlog((prev) => ({ ...prev, [e.target.name]: e.target.value }))
-          }
-        ></textarea>
-        <label>Add Image</label>
-        <input
-          multiple
-          type="file"
-          onChange={handleFileChange}
-          accept=".png,.jpg,.mp4,jpeg"
-        />
-        {file &&
-          file.map((image, index) => (
-            <div key={index}>
-              <img
-                width={100}
-                height="auto"
-                src={URL.createObjectURL(image)}
-                alt={`${image}`}
+        <Button
+          variant="outlined"
+          startIcon="<-"
+          style={{
+            color: "white",
+            border: "1px solid white",
+            padding: "0px 24px",
+          }}
+          onClick={() => router.push("/posts")}
+        >
+          <Typography>Back</Typography>
+        </Button>
+      </Grid>
+      <Grid container direction="row" justify="space-evenly">
+        <Grid
+          item
+          xs={4}
+          style={{ paddingRight: 100, borderRight: "1px solid white" }}
+        >
+          <Grid>
+            <Typography>Add a New Blog</Typography>
+          </Grid>
+          <Grid>
+            <form>
+              <Typography>Blog title</Typography>
+              <TextField
+                variant="filled"
+                style={{ width: "100%" }}
+                inputProps={{ style: { color: "white" } }}
+                type="text"
+                required
+                value={blog && blog.title}
+                name="title"
+                onChange={(e) =>
+                  setBlog((prev) => ({
+                    ...prev,
+                    [e.target.name]: e.target.value,
+                  }))
+                }
               />
-              <Button
-                onClick={(e) => {
-                  e.preventDefault();
-                  const newImages = [...file];
-                  const index = newImages.indexOf(image);
-                  newImages.splice(index, 1);
-                  setFile(newImages);
-                }}
-              >
-                Delete Image
-              </Button>
-            </div>
-          ))}
-      </form>
-      <button
-        onClick={(e) => {
-          handleupdate(e);
-        }}
-      >
-        Update post
-      </button>
-      <button
-        onClick={() => {
-          bloginit();
-        }}
-      >
-        Reset
-      </button>
-      <h2>Current Image</h2>
-      <div>
-        {blog &&
-          blog.images.map((e, i) => (
-            <div key={i}>
-              <img
-                width={100}
-                height="auto"
-                src={`http://localhost:3000/api/media/image/${e}`}
-              />
-              <button
-                key={i}
-                onClick={() => {
-                  if (!deletefile.some((el) => e == el)) {
-                    setBlog((prev) => ({
-                      ...prev,
-                      images: blog.images.filter((image) => image != e),
-                    }));
-                    setDeleteFile((prev) => [...prev, e]);
-                  }
-                }}
-              >
-                delete
-              </button>
-            </div>
-          ))}
-      </div>
-    </div>
+              <Typography>Blog body</Typography>
+              <TextField
+                variant="filled"
+                style={{ width: "100%" }}
+                inputProps={{ style: { color: "white" } }}
+                required
+                multiline
+                rows={20}
+                value={blog && blog.content}
+                name="content"
+                onChange={(e) =>
+                  setBlog((prev) => ({
+                    ...prev,
+                    [e.target.name]: e.target.value,
+                  }))
+                }
+              ></TextField>
+              <Typography>Blog image</Typography>
+              <Grid container justify="center">
+                <Button variant="text" component="label">
+                  <Typography>Select Image </Typography>
+                  <input
+                    multiple
+                    type="file"
+                    hidden
+                    onChange={handleFileChange}
+                    accept=".png,.jpg,.mp4,jpeg"
+                  />
+                </Button>
+              </Grid>
+              <Grid container>
+                {file &&
+                  file.map((image, index) => (
+                    <Grid item xs={3} key={index}>
+                      <Grid style={{ height: 100 }}>
+                        <img
+                          width={100}
+                          height="auto"
+                          src={URL.createObjectURL(image)}
+                          alt={`${image}`}
+                        />
+                      </Grid>
+                      <Button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          const newImages = [...file];
+                          const index = newImages.indexOf(image);
+                          newImages.splice(index, 1);
+                          setFile(newImages);
+                        }}
+                      >
+                        <Typography> Delete Image</Typography>
+                      </Button>
+                    </Grid>
+                  ))}
+              </Grid>
+            </form>
+          </Grid>
+          <Grid container justify="space-around">
+            <Button
+              onClick={(e) => {
+                handleupdate(e);
+              }}
+            >
+              <Typography> Update post</Typography>
+            </Button>
+            <Button
+              onClick={() => {
+                bloginit();
+              }}
+            >
+              <Typography>Reset</Typography>
+            </Button>
+          </Grid>
+          <Typography>Current Image</Typography>
+          <Grid container>
+            {blog &&
+              blog.images.map((e, i) => (
+                <Grid item xs={3} key={i}>
+                  <Grid style={{ height: 100 }}>
+                    <img
+                      width={100}
+                      height="auto"
+                      src={`${apiUrl}/media/image/${e}`}
+                    />
+                  </Grid>
+                  <Button
+                    key={i}
+                    onClick={() => {
+                      if (!deletefile.some((el) => e == el)) {
+                        setBlog((prev) => ({
+                          ...prev,
+                          images: blog.images.filter((image) => image != e),
+                        }));
+                        setDeleteFile((prev) => [...prev, e]);
+                      }
+                    }}
+                  >
+                    <Typography>Delete</Typography>
+                  </Button>
+                </Grid>
+              ))}
+          </Grid>
+        </Grid>
+        <Grid item xs={6}>
+          <Typography>Preview</Typography>
+          <Carousel>
+            {file &&
+              file.map((image, index) => (
+                <div key={index}>
+                  <img src={URL.createObjectURL(image)} alt={image} />
+                </div>
+              ))}
+            {blog.images.map((image, index) => (
+              <div key={index}>
+                <img src={`${apiUrl}/media/image/${image}`} alt={image} />
+              </div>
+            ))}
+          </Carousel>
+          <Typography variant="h2" style={{ color: "white" }}>
+            <b>{blog.title}</b>
+          </Typography>
+          <Grid container justify="center">
+            <Typography style={{ color: "white" }} variant="h6" gutterBottom>
+              {blog.content}
+            </Typography>
+          </Grid>
+        </Grid>
+      </Grid>
+    </WraperTest>
   );
 }

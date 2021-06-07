@@ -62,6 +62,13 @@ const theme = createMuiTheme({
       color: "white",
     },
   },
+  overrides: {
+    MuiInputBase: {
+      multiline: {
+        background: "#4c5265",
+      },
+    },
+  },
 });
 
 export default theme;

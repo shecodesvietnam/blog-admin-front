@@ -1,26 +1,17 @@
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 
 import MediaServices from "../../services/MediaServices";
 import BlogServices from "../../services/BlogServices";
-import randomkey from "../../utilities/randomkey";
-import { Button } from "@material-ui/core";
+import { Button, Grid, Input, TextField, Typography } from "@material-ui/core";
+import WraperTest from "../layout/withlayout";
+import { useHistory } from "react-router";
+import { Carousel } from "react-responsive-carousel";
 
 const Create = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [file, setFile] = useState([]);
-  const [allimg, setAllImage] = useState([]);
-  const formRef = useRef();
-
-  useEffect(() => {
-    MediaServices.getAll()
-      .catch((e) => console.log(e))
-      .then((res) => {
-        if (res) {
-          setAllImage(res.data);
-        }
-      });
-  }, [allimg]);
+  const router = useHistory();
 
   const handleFileChange = (e) => {
     if (e.target.files[0].size / 1000000 < 1) {
@@ -49,7 +40,6 @@ const Create = () => {
       })
       .catch((e) => console.log(e))
       .then((res) => {
-        console.log(res.data);
         setTitle("");
         setContent("");
         setFile([]);
@@ -57,81 +47,143 @@ const Create = () => {
   };
 
   return (
-    <div className="create">
-      <h2>Add a New Blog</h2>
-      <form ref={formRef}>
-        <label>Blog title:</label>
-        <input
-          type="text"
-          required
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <label>Blog body:</label>
-        <textarea
-          required
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-        ></textarea>
-        <label>Image</label>
-        <input
-          multiple
-          type="file"
-          onChange={handleFileChange}
-          accept=".png,.jpg,.mp4,jpeg"
-        />
-        {file.map((image, index) => (
-          <div key={index}>
-            <img
-              width={100}
-              height="auto"
-              src={URL.createObjectURL(image)}
-              alt={`${image}`}
-            />
-            <Button
-              onClick={(e) => {
-                e.preventDefault();
-                const newImages = [...file];
-                const index = newImages.indexOf(image);
-                newImages.splice(index, 1);
-                setFile(newImages);
-              }}
-            >
-              Delete Image
-            </Button>
-          </div>
-        ))}
-      </form>
-      <button
-        onClick={(e) => {
-          handleSubmit(e);
+    <WraperTest>
+      <Grid
+        container
+        style={{
+          marginTop: 16,
+          marginBottom: 32,
+          width: "90%",
+          paddingBottom: 16,
+          borderBottom: "1px solid white",
         }}
       >
-        Create post
-      </button>
-      <div>
-        {allimg &&
-          allimg.map((e, i) => (
-            <div key={randomkey()}>
-              <img
-                width={100}
-                height="auto"
-                src={`http://localhost:3000/api/media/image/${e.filename}`}
+        <Button
+          variant="outlined"
+          startIcon="<-"
+          style={{
+            color: "white",
+            border: "1px solid white",
+            padding: "0px 24px",
+          }}
+          onClick={() => router.goBack()}
+        >
+          <Typography>Back</Typography>
+        </Button>
+      </Grid>
+      <Grid container direction="row" justify="space-evenly">
+        <Grid
+          item
+          xs={4}
+          style={{ paddingRight: 100, borderRight: "1px solid white" }}
+        >
+          <Grid>
+            <Typography align="left">Add a New Blog</Typography>
+          </Grid>
+          <Grid>
+            <form>
+              <Grid>
+                <Typography>Blog title:</Typography>
+              </Grid>
+              <TextField
+                variant="filled"
+                style={{ width: "100%" }}
+                inputProps={{ style: { color: "white" } }}
+                type="text"
+                required
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
               />
-              <button
-                key={i}
-                onClick={() =>
-                  MediaServices.deleteImg(e.filename).then((res) => {
-                    console.log(res);
-                  })
+              <Grid>
+                <Typography>Blog body:</Typography>
+              </Grid>
+              <TextField
+                variant="filled"
+                style={{ width: "100%" }}
+                inputProps={{ style: { color: "white" } }}
+                required
+                multiline
+                rows={20}
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+              ></TextField>
+              <Grid>
+                <Typography>Image</Typography>
+              </Grid>
+              <Button variant="text" component="label">
+                <Typography>Chọn ảnh từ máy tính </Typography>
+                <input
+                  type="file"
+                  accept="image/png, image/jpeg"
+                  hidden
+                  onChange={handleFileChange}
+                />
+              </Button>
+              <Grid container>
+                {file.map((image, index) => (
+                  <Grid item xs={3} key={index}>
+                    <Grid style={{ height: 100 }}>
+                      <img
+                        width={100}
+                        height="auto"
+                        src={URL.createObjectURL(image)}
+                        alt={`${image}`}
+                      />
+                    </Grid>
+                    <Button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        const newImages = [...file];
+                        const index = newImages.indexOf(image);
+                        newImages.splice(index, 1);
+                        setFile(newImages);
+                      }}
+                    >
+                      <Typography>Delete Image</Typography>
+                    </Button>
+                  </Grid>
+                ))}
+              </Grid>
+            </form>
+            <Grid container>
+              <Button
+                variant="outlined"
+                style={{ border: "1px solid white" }}
+                onClick={(e) => {
+                  handleSubmit(e).then(() => router.push("/posts"));
+                }}
+                disabled={
+                  !(
+                    content.length != 0 &&
+                    file.length != 0 &&
+                    title.length != 0
+                  )
                 }
               >
-                delete
-              </button>
-            </div>
-          ))}
-      </div>
-    </div>
+                <Typography>Create post</Typography>
+              </Button>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs={6}>
+          <Typography>Preview</Typography>
+          <Carousel>
+            {file &&
+              file.map((image, index) => (
+                <div key={index}>
+                  <img src={URL.createObjectURL(image)} alt={image} />
+                </div>
+              ))}
+          </Carousel>
+          <Typography variant="h2" style={{ color: "white" }}>
+            <b>{title}</b>
+          </Typography>
+          <Typography style={{ color: "white" }} variant="h6" gutterBottom>
+            {content}
+          </Typography>
+        </Grid>
+      </Grid>
+    </WraperTest>
   );
 };
 

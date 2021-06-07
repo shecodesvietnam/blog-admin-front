@@ -7,10 +7,18 @@ import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+import { apiUrl } from "../../config/endpoint.json";
 
 const useStyles = makeStyles({
   root: {
-    maxWidth: 345,
+    width: 250,
+    height: 380,
+    background: "black",
+    borderImageSource:
+      "linear-gradient(to left, rgb(232, 8, 114), rgb(89, 35, 104))",
+    border: "1px solid",
+    borderImageSlice: 1,
+    padding: 16,
   },
 });
 
@@ -22,18 +30,18 @@ export default function PostCard(props) {
       <CardActionArea>
         <CardMedia
           component="img"
-          height="200"
+          style={{ height: 200, width: 200, margin: "auto" }}
           image={
-            `http://localhost:3000/api/media/image/${props.images[0]}` ||
+            `${apiUrl}/media/image/${props.images[0]}` ||
             "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"
           }
         />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            {props.title || "Please Wait"}
+          <Typography gutterBottom component="h2">
+            {props.title.slice(0, 20) || "Please Wait"}
           </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
-            {props.content || "Loading"}
+          <Typography variant="body2" component="p">
+            {props.content.slice(0, 50) || "Loading"}
           </Typography>
         </CardContent>
       </CardActionArea>

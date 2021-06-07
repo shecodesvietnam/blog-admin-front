@@ -1,13 +1,14 @@
 import axios from "axios";
+import { apiUrl } from "../config/endpoint.json";
 
 const token = localStorage.getItem("x-auth-token");
 
 const unAuth = axios.create({
-  baseURL: "http://localhost:3000/api",
+  baseURL: apiUrl,
 });
 
 const defAuth = axios.create({
-  baseURL: "http://localhost:3000/api",
+  baseURL: apiUrl,
   headers: {
     "X-Auth-Token": token,
   },
