@@ -12,7 +12,7 @@ import {
 import LinkedInIcon from "@material-ui/icons/LinkedIn";
 import FacebookIcon from "@material-ui/icons/Facebook";
 import InstagramIcon from "@material-ui/icons/Instagram";
-import axios from "axios";
+import UserServices from "../services/UserServices";
 
 const useStyle = makeStyles((theme) => ({
   root: {
@@ -37,7 +37,6 @@ const useStyle = makeStyles((theme) => ({
       outline: "none",
       background:
         "linear-gradient(to right bottom, #e80872 69.1%, #592368 102.67%)",
-      // -webkit-background-clip: "text",
       transform: "rotate(5deg) scale(1.3)",
     },
   },
@@ -100,15 +99,14 @@ export default function SignInForm() {
   const handleSubmit = async (e) => {
     setErrorSignin(false);
     e.preventDefault();
-    const reponse = await axios
-      .post(`http://206.189.155.4:3000/api/auth`, inputValues)
-      .catch((err) => {
-        console.log(err);
-        setErrorSignin(true);
-      });
+    const reponse = await UserServices.login(inputValues).catch((err) => {
+      console.log(err);
+      setErrorSignin(true);
+    });
     if (reponse) {
-      localStorage.setItem("JWT", reponse.data);
+      localStorage.setItem("x-auth-token", reponse.data);
       history.push("/posts");
+      window.location.reload();
     }
   };
 
@@ -161,17 +159,17 @@ export default function SignInForm() {
           justify="center"
           className={classes.footerContainer}
         >
-          <Grid xs={4}>
+          <Grid item xs={4}>
             <IconButton>
               <FacebookIcon className={classes.buttonSignin} />
             </IconButton>
           </Grid>
-          <Grid xs={4}>
+          <Grid item xs={4}>
             <IconButton>
               <InstagramIcon className={classes.buttonSignin} />
             </IconButton>
           </Grid>
-          <Grid xs={4}>
+          <Grid item xs={4}>
             <IconButton>
               <LinkedInIcon className={classes.buttonSignin} />
             </IconButton>

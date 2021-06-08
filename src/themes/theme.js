@@ -1,4 +1,3 @@
-import React from "react";
 import { createMuiTheme } from "@material-ui/core/styles";
 
 const theme = createMuiTheme({
@@ -61,6 +60,13 @@ const theme = createMuiTheme({
       lineHeight: "18px",
       textAlign: "center",
       color: "white",
+    },
+  },
+  overrides: {
+    MuiInputBase: {
+      multiline: {
+        background: "#4c5265",
+      },
     },
   },
 });
