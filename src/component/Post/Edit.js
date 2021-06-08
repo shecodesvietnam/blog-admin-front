@@ -31,9 +31,11 @@ export default function Edit() {
   const bloginit = () => {
     setDeleteFile([]);
     setFile([]);
-    BlogServices.get(id).then((res) => {
-      setBlog(res.data);
-    });
+    BlogServices.get(id)
+      .then((res) => {
+        setBlog(res.data);
+      })
+      .catch((err) => window.location.replace("/404"));
   };
   useEffect(() => {
     bloginit();

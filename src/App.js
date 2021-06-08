@@ -32,15 +32,11 @@ function App() {
           <Route exact path="/" component={SignInPage}>
             {IsAuth && <Redirect to="/posts" />}
           </Route>
-          {IsAuth && (
-            <>
-              <Route exact path="/posts" component={PostsPage} />
-              <Route exact path="/posts/create" component={Create} />
-              <Route exact path="/posts/:id" component={FullPost} />
-              <Route exact path="/posts/:id/edit" component={Edit} />
-              <Route exact path="/gallery" component={Gallery} />
-            </>
-          )}
+          <Route exact path="/posts" component={PostsPage} />
+          <Route exact path="/posts/create" component={Create} />
+          <Route exact path="/posts/:id" component={FullPost} />
+          <Route exact path="/posts/:id/edit" component={Edit} />
+          <Route exact path="/gallery" component={Gallery} />
           <Route path="*" exact={true} component={Notfound}></Route>
         </Switch>
       </tokenContext.Provider>
