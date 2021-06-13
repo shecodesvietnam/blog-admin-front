@@ -15,10 +15,10 @@ export default function PostsPage() {
   useEffect(() => {
     Auth();
     BlogServices.getAll()
+      .then((res) => setData(res.data))
       .catch((err) => {
         console.log(err);
-      })
-      .then((res) => setData(res.data));
+      });
   }, []);
 
   useEffect(() => {
