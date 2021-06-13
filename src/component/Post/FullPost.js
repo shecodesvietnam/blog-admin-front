@@ -13,7 +13,9 @@ export default function FullPage() {
   const router = useHistory();
 
   useEffect(() => {
-    BlogServices.get(id).then((res) => setBlog(res.data));
+    BlogServices.get(id)
+      .then((res) => setBlog(res.data))
+      .catch((err) => window.location.replace("/404"));
   }, []);
   return (
     <WraperTest>
